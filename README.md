@@ -1,5 +1,70 @@
 # 33.0-express-intro
 
+## Middleware
+
+a function that transforms the request and/or the response object
+
+it runs between the handling of the request and response
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3b9240c9-22ef-4b37-94b2-2b300f096e5f/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3b9240c9-22ef-4b37-94b2-2b300f096e5f/Untitled.png)
+
+Middleware can be used for a lot of things, including
+
+working with form data, authentication, logging, error handling
+
+1. set up new route in index.js
+
+    ```jsx
+    app.get('/', (req, res) => {
+      res.render('welcome')
+    })
+    ```
+
+2. create new view with form layout
+
+    ```jsx
+    <!-- views/welcome.hbs -->
+    <h1>Hello World</h1>
+    {{!-- action is the route --}}
+    {{!-- method post is to send data to the server --}}
+    <form action="/" method="post">
+      <label for="name">Please enter your name</label>
+      {{!-- whatever is in name will be the object property of body --}}
+      <input id="name" type="text" name="name">
+      <input type="submit">
+    </form>
+    ```
+
+3. create a post route with the same signature, but now it has a post method
+
+    ```jsx
+    app.post('/', (req, res) => {
+      res.send('Waddup Was Hannenin')
+    })
+    ```
+
+    now we use middleware to capture the user input
+
+4. put middleware into index.js (below requirements and above controllers)
+
+    ```jsx
+    // add `express.json` middleware which will parse JSON requests into
+    // JS objects before they reach the route files.
+    // The method `.use` sets up middleware for the Express application
+    app.use(express.json())
+    // this parses requests that may use a different content type
+    app.use(express.urlencoded({ extended: true }))
+    ```
+
+5. put something in the post method so it knows what to do after form submit
+
+    ```jsx
+    app.post('/', (req, res) => {
+      console.log(req.body.name)
+      res.send('What\'s good ' + req.body.name)
+    })
+    ```
+
 ## Express & Mongoose
 
 ### Intro to MVC
@@ -19,6 +84,16 @@ present the data for that feature
 write some business logic to control how the feature works.
 
 - more info
+
+    Each of these can be considered a separate concern: presentation, persistence, business logic. Separating these makes them easier to build, write, maintain or change. For example, if we want to change how we're presenting some data, we can do so by just changing the presentation part of our app without affecting the persistence or business logic.
+
+    In terms of MVC, we can roughly correlate:
+
+    - **Model** to data
+    - **View** to user interface
+    - **Controller** to the business logic inside the callback for each of our routes
+
+    # 
 
 ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8a31b501-64dd-4136-8c2d-225ba46be282/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8a31b501-64dd-4136-8c2d-225ba46be282/Untitled.png)
 
@@ -201,8 +276,34 @@ Running the Seed File
     > db.todos.find()
 
 - Remember CRUD?
+
+    CRUD is an acronym you'll hear a lot: it captures all of the operations we can perform on data in our application. CRUD stands for:
+
+    - **Create** - make a new instance of our data
+    - **Read** - view our data
+    - **Update** - edit an existing data instance
+    - **Delete** - remove an existing piece of data
+
+    As we're building out the routes for working with our data, we'll be building them to perform full CRUD. That means we'll have routes for creating, reading, updating and deleting data in our application.
+
 - What is REST?
+
+    REST is an architectural style
+
+    REST, or REpresentational State Transfer, standardizes the conventions we use when the combining these methods and paths to perform specific actions
+
+    it's not a protocol like HTTP, but it is widely accepted as convention
+
 - HTTP Methods for RESTful Services
+
+    HTTP defines a set of request methods
+
+    [Untitled](https://www.notion.so/5488230ff7544254828423eac453d028)
+
+    So, wait -- there are 5 HTTP methods, but only 4 CRUD methods?
+
+    `PUT` and `PATCH` are both used for updating. The difference is that `PUT` replaces an entire database record/document, whereas `PATCH` replaces some of the data in the record/document.
+
 - RESTful Routes
 
     a route is a method plus a path...
