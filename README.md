@@ -6,7 +6,7 @@ a function that transforms the request and/or the response object
 
 it runs between the handling of the request and response
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3b9240c9-22ef-4b37-94b2-2b300f096e5f/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3b9240c9-22ef-4b37-94b2-2b300f096e5f/Untitled.png)
+![middlewaregrapghic](https://user-images.githubusercontent.com/68978118/105266128-5feee300-5b4e-11eb-8311-4ffb2c0aea28.png)
 
 Middleware can be used for a lot of things, including
 
@@ -42,8 +42,7 @@ working with form data, authentication, logging, error handling
       res.send('Waddup Was Hannenin')
     })
     ```
-
-    now we use middleware to capture the user input
+now we use middleware to capture the user input
 
 4. put middleware into index.js (below requirements and above controllers)
 
@@ -82,26 +81,30 @@ persist the data for that feature
 present the data for that feature
 
 write some business logic to control how the feature works.
+<details>
+  <summary>More Info</summary>
+    
+Each of these can be considered a separate concern: presentation, persistence, business logic. Separating these makes them easier to build, write, maintain or change. For example, if we want to change how we're presenting some data, we can do so by just changing the presentation part of our app without affecting the persistence or business logic.
 
-- more info
+In terms of MVC, we can roughly correlate:
 
-    Each of these can be considered a separate concern: presentation, persistence, business logic. Separating these makes them easier to build, write, maintain or change. For example, if we want to change how we're presenting some data, we can do so by just changing the presentation part of our app without affecting the persistence or business logic.
+* **Model** to data
+* **View** to user interface
+* **Controller** to the business logic inside the callback for each of our routes
 
-    In terms of MVC, we can roughly correlate:
+</details>
 
-    - **Model** to data
-    - **View** to user interface
-    - **Controller** to the business logic inside the callback for each of our routes
+![mcvpattern](https://user-images.githubusercontent.com/68978118/105268934-477fc800-5b50-11eb-8bf9-9d0146270561.png)
 
-    # 
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8a31b501-64dd-4136-8c2d-225ba46be282/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8a31b501-64dd-4136-8c2d-225ba46be282/Untitled.png)
+<details>
+    <summary>Web Application Structures</summary>
+    
+![modernSPAgraphic](https://user-images.githubusercontent.com/68978118/105268499-9711c400-5b4f-11eb-967b-c35de18eebfd.png)
+![fullStackMonolith](https://user-images.githubusercontent.com/68978118/105268573-bad50a00-5b4f-11eb-92b0-da5d7493697a.png)
 
-- Web Application Structures
+</details>
 
-    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/433c977f-81d6-4841-bd33-1481aa53e43d/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/433c977f-81d6-4841-bd33-1481aa53e43d/Untitled.png)
-
-    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4299630a-7ae3-429c-9df7-f8b252559ecd/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4299630a-7ae3-429c-9df7-f8b252559ecd/Untitled.png)
 
 ## Express & MongoDB
 
@@ -161,13 +164,16 @@ Connect to Mongoose
     module.exports = mongoose;
     ```
 
-    - more info
+<details>
+    <summary>More Info</summary>
 
-        **`const mongoose = require('mongoose')`** - To use Mongoose, we require its corresponding node module and save it in a variable we can reference later.
+**`const mongoose = require('mongoose')`** - To use Mongoose, we require its corresponding node module and save it in a variable we can reference later.
 
-        **`mongoose.connect`** - To link Mongoose to our `express-mvc` Mongo database, we'll use the `mongoose.connect()` method and pass it the address of the database.
+**`mongoose.connect`** - To link Mongoose to our `express-mvc` Mongo database, we'll use the `mongoose.connect()` method and pass it the address of the database.
 
-        **`module.exports = mongoose`** - When `connection.js` file is required in other files, it will evaluate to this *connected* version of `mongoose`.
+**`module.exports = mongoose`** - When `connection.js` file is required in other files, it will evaluate to this *connected* version of `mongoose`.
+
+</details>
 
 Define a Mongoose Schema and Model
 
@@ -199,14 +205,16 @@ Define a Mongoose Schema and Model
 
     module.exports = Todo;
     ```
+<details>
+    <summary>More Info</summary>
 
-    - more info
+**`mongoose.Schema( )`** - The schema method creates a blueprint for our Todo model describing tthe attributes it will have and what data types they will be.
 
-        **`mongoose.Schema( )`** - The schema method creates a blueprint for our Todo model describing tthe attributes it will have and what data types they will be.
+**`mongoose.model( )`** - We attach our schema to our model by passing in two arguments to this method: (1) the desired name of our model ("Todo") and (2) the existing schema.
 
-        **`mongoose.model( )`** - We attach our schema to our model by passing in two arguments to this method: (1) the desired name of our model ("Todo") and (2) the existing schema.
+**`module.exports = Todo`** - When this file (`todo-model.js`) is required in other files, it will evaluate to the `Todo` model defined here through which we will be able to query the `todo` collection in our Mongo database.
 
-        **`module.exports = Todo`** - When this file (`todo-model.js`) is required in other files, it will evaluate to the `Todo` model defined here through which we will be able to query the `todo` collection in our Mongo database.
+</details>
 
 Set  up Seed Data
 
@@ -264,7 +272,16 @@ Set up Seed File
       });
     ```
 
-    - more info
+<details>
+    <summary>More Info</summary>
+    
+**`const Todo = require('../models/todo-model')`** - Bring in our model that defines the structure for our data and provides a connection to the database.
+
+**`Todo.remove({})`** - This clears out the entire `todo` collection. The empty query (curly braces) works the same as when passed to `.find({})` **matching every document** in the database collection.
+
+**`Todo.collection.insert(seedData)`** - Create a collection using the JSON contained in our seed file. Note that this is ideal for bulk insertion but **skips** schema validation. In our controller, where we will want validation, we will use `Todo.create()`.
+
+</details>
 
 Running the Seed File
 
@@ -275,50 +292,68 @@ Running the Seed File
 
     > db.todos.find()
 
-- Remember CRUD?
+<details>
+    <summary>Remember CRUD?</summary>
+    
+CRUD is an acronym you'll hear a lot: it captures all of the operations we can perform on data in our application. CRUD stands for:
 
-    CRUD is an acronym you'll hear a lot: it captures all of the operations we can perform on data in our application. CRUD stands for:
+* **Create**:  make a new instance of our data
+* **Read**: view our data
+* **Update**: edit an existing data instance
+* **Delete**: remove an existing piece of data
 
-    - **Create** - make a new instance of our data
-    - **Read** - view our data
-    - **Update** - edit an existing data instance
-    - **Delete** - remove an existing piece of data
+As we're building out the routes for working with our data, we'll be building them to perform full CRUD. That means we'll have routes for creating, reading, updating and deleting data in our application.
 
-    As we're building out the routes for working with our data, we'll be building them to perform full CRUD. That means we'll have routes for creating, reading, updating and deleting data in our application.
+</details>
 
-- What is REST?
+<details>
+    <summary>What is REST?</summary>
+    
+REST is an architectural style.
 
-    REST is an architectural style
+REST, or REpresentational State Transfer, standardizes the conventions we use when the combining these methods and paths to perform specific actions.
 
-    REST, or REpresentational State Transfer, standardizes the conventions we use when the combining these methods and paths to perform specific actions
+it's not a protocol like HTTP, but it is widely accepted as convention.
 
-    it's not a protocol like HTTP, but it is widely accepted as convention
+</details>
 
-- HTTP Methods for RESTful Services
+<details>
+    <summary>HTTP Methods for RESTful Services</summary>
 
-    HTTP defines a set of request methods
+HTTP defines a set of request methods.
+    
+| HTTP MEthod | CRUD Function | DB Action  |
+| --- | --- | --- |
+| GET | read | retrieve data |
+| POST | create | add data |
+| PUT | update | modify ALL existing data |
+| PATCH | update | modify only specific data |
+| DELETE | delete | delete existing data |
 
-    [Untitled](https://www.notion.so/5488230ff7544254828423eac453d028)
+So, wait -- there are 5 HTTP methods, but only 4 CRUD methods?
 
-    So, wait -- there are 5 HTTP methods, but only 4 CRUD methods?
+`PUT` and `PATCH` are both used for updating. The difference is that `PUT` replaces an entire database record/document, whereas `PATCH` replaces some of the data in the record/document.
 
-    `PUT` and `PATCH` are both used for updating. The difference is that `PUT` replaces an entire database record/document, whereas `PATCH` replaces some of the data in the record/document.
+</details>
 
-- RESTful Routes
+<details>
+    <summary>RESTful Routes</summary>
 
-    a route is a method plus a path...
+a route is a method plus a path...
 
-    Method + Path = Route
+Method + Path = Route
 
-    resource is the main collection and the path with no other parameters
+resource is the main collection and the path with no other parameters
 
-    Each route results in an **action**. Routes that follow REST conventions are known as RESTful routes:
+Each route results in an **action**. Routes that follow REST conventions are known as RESTful routes:
 
-    [https://media.git.generalassemb.ly/user/17300/files/96870180-db9d-11ea-83ce-efe6b7517ec5](https://media.git.generalassemb.ly/user/17300/files/96870180-db9d-11ea-83ce-efe6b7517ec5)
+![RESTfulRoutes](https://user-images.githubusercontent.com/68978118/105270553-31bfd200-5b53-11eb-8959-38691a617817.png)
 
-    We'll refer back to these routes at each step as we build out our controllers. For a resource with full CRUD, the controller for that resource will likely have each of the above 7 routes.
+We'll refer back to these routes at each step as we build out our controllers. For a resource with full CRUD, the controller for that resource will likely have each of the above 7 routes.
 
-    ** id's will return one thing (because it is an Object id)
+** id's will return one thing (because it is an Object id)
+
+</details>
 
 Build a Server
 
@@ -348,9 +383,12 @@ Build a Server
     });
     ```
 
-    - more info
+<details>
+    <summary>More Info</summary>
 
-        The port where we'll run our server might be different in production versus locally on our machine. Having the ability to use an environment variable to control this is a convenience that will serve us later if we choose to deploy this application.
+The port where we'll run our server might be different in production versus locally on our machine. Having the ability to use an environment variable to control this is a convenience that will serve us later if we choose to deploy this application.
+
+</details>
 
 2. scaffold out all routes in Landmarks area (refer to restful routes above)
 
@@ -400,18 +438,21 @@ Build a Server
     })
     ```
 
-    - more info
+<details>
+    <summary>More Info</summary>
+    
+**`Todo.find({})`** - Retrieves all todos in the database since we are not passing in any parameters to the method.
 
-        **`Todo.find({})`** - Retrieves all todos in the database since we are not passing in any parameters to the method.
+**`.then(function(todos){ ... })`** - `todos` represents the all the Todos pulled from the database. We can then reference this inside of `.then`.
 
-        **`.then(function(todos){ ... })`** - `todos` represents the all the Todos pulled from the database. We can then reference this inside of `.then`.
+**`res.render('todos/index', { todos });`** - A little confusing, we're rendering our `index` view and passing in our `todos` from the database
 
-        **`res.render('todos/index', { todos });`** - A little confusing, we're rendering our `index` view and passing in our `todos` from the database
+</details>
 
 4. create layout.hbs in views folder
 5. create todos folder in views folder and create an index.hbs inside todos
 
-    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0a76cf28-bc1e-4152-9c29-b873d690725a/Screen_Shot_2020-11-06_at_1.17.44_PM.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0a76cf28-bc1e-4152-9c29-b873d690725a/Screen_Shot_2020-11-06_at_1.17.44_PM.png)
+![fileStructure](https://user-images.githubusercontent.com/68978118/105270686-6d5a9c00-5b53-11eb-8337-962da050924f.png)
 
 6.  import html boilerplate into layout.hbs
 
